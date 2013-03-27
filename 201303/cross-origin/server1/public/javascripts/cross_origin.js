@@ -5,19 +5,18 @@ and whether sender could receive response from that cross-origin server.
 */
 
 document.body.onload = function () {
-	console.log('document loaded');
 	var target = 'http://localhost:3001/';
 
-	function _append (content, style) {
-		var p = document.createElement('p'),
-			prop;
-		p.innerHTML = content;
+	function _append (content, style, tagName) {
+		var tag, prop;
+		tag = document.createElement(tagName || 'p');
+		tag.innerHTML = content;
 		for (prop in style) {
 			if (style.hasOwnProperty(prop)) {
-				p.style[prop] = style[prop];
+				tag.style[prop] = style[prop];
 			}
 		}
-		document.body.appendChild(p);
+		document.body.appendChild(tag);
 	}
 
 	// Cross-origin by XMLHttpRequest without `Access-Control-Allow-Origin`:
