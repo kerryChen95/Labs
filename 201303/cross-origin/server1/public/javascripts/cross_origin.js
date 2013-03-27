@@ -5,7 +5,7 @@ and whether sender could receive response from that cross-origin server.
 */
 
 document.body.onload = function () {
-	var target = 'http://localhost:3001/';
+	var target = 'http://localhost:3001';
 
 	function _append (content, style, tagName) {
 		var tag, prop;
@@ -19,6 +19,11 @@ document.body.onload = function () {
 		document.body.appendChild(tag);
 	}
 
+	// Display the origin of current document and the origin of target server
+	// to show we are cross-origin
+	_append('The origin we are in: ' + location.protocol + '//' + location.host, null, 'h2');
+	_append('The target origin: ' + target, null, 'h2');
+
 	// Cross-origin by XMLHttpRequest without `Access-Control-Allow-Origin`:
 	// 目标服务器能接收到请求，
 	// 但HTTP响应报文会被浏览器屏蔽，无法在浏览器端通过JS获取，
@@ -27,7 +32,7 @@ document.body.onload = function () {
 		var xhr;
 
 		var append = function () {
-			arguments[0] = 'Example: cross-origin by XHR<hr/>' + arguments[0];
+			arguments[0] = 'Example 1: cross-origin by XHR<hr/>' + arguments[0];
 			return _append.apply( null, arguments );
 		}
 
@@ -67,7 +72,7 @@ document.body.onload = function () {
 			body = document.body;
 
 		var append = function () {
-			arguments[0] = 'Example: cross-origin by `img.src`<hr/>' + arguments[0];
+			arguments[0] = 'Example 2: cross-origin by `img.src`<hr/>' + arguments[0];
 			return _append.apply( null, arguments );
 		}
 
