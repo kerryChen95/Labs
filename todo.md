@@ -1,0 +1,27 @@
+# Todo
+
+- XHR2 progress events
+	- [ ] Drag-and-Drop then upload progressly
+- XHR `onreadystatechange` event
+	- [ ] Order
+	- [ ] Skip
+	- [ ] Reset
+	- [ ] When cross-origin
+	- [ ] `onreadystatechange` event handler is called asynchronous or not?
+- [ ] form data
+	- [ ] encode form-data
+		- [x] dev
+		- [ ] test
+	- [ ] using XHR2 `FomeData` for mulitipart form-data
+		- [x] dev
+		- [ ] test
+- [ ] encode form-data
+	- [x] dev
+	- [ ] test
+- [ ] cross-origin
+	- [x] by normal XHR
+	- [x] by `img` tag
+	- [ ] by `script` tag, JSONP
+	- [ ] by `iframe` tag
+	- [ ] by CORS
+	- [ ] by HTTP header `Access-Control-Allow-Origin` of host origin

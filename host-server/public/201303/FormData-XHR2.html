@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>POST multipart/form-data request body</title>
+</head>
+<body>
+	<script>
+	// POST multipart/form-data request body
+	function postFormData (url, data, success) {
+		var xhr, formData, name, value;
+
+		if (typeof FormData === 'undefined') {
+			throw new Error ('FormData is not implemented!');
+		}
+
+		xhr = new XMLHttpRequest();
+		xhr.open('POST', url);
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status <= 299 && typeof success === 'function') {
+				success(xhr);
+			}
+		};
+
+		formData = new FormData();
+		for (name in data) {
+			value = data[name];
+			if (data.hasOwnProperty(name) && typeof value !== 'function') {
+				formData.append(name, value);
+			}
+		}
+		xhr.send(formData);
+	}
+	</script>
+</body>
+</html>
