@@ -1,8 +1,8 @@
 # Todo
 
-- XHR2 progress events
+- [ ] XHR2 progress events
 	- [ ] Drag-and-Drop then upload progressly
-- XHR `onreadystatechange` event
+- [ ] XHR `onreadystatechange` event
 	- [ ] Order
 	- [ ] Skip
 	- [ ] Reset
