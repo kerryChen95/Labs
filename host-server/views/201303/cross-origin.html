@@ -63,7 +63,7 @@
 						}
 					}
 				};
-				xhr.open('GET', target + 'xhr?name=value');
+				xhr.open('GET', target + '/xhr?name=value');
 				xhr.send();
 			} catch (e) {
 				console.log('Can not catch this error: ', e);
@@ -87,7 +87,7 @@
 
 			img.style.display = 'none';
 			body.appendChild(img);
-			img.src = target + 'img?name=value';
+			img.src = target + '/img?name=value';
 			append('An cross-origin GET request is sent by `img.src`');
 
 			img.onload = function () {
