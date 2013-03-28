@@ -1,8 +1,9 @@
-
 /*
- * GET home page.
- */
+routes index
+*/
 
-exports.index = function(req, res){
-  res.render('index');
+var routes201303 = require('./201303.js');
+
+exports.index = function(app){
+	routes201303.index(app);
 };
