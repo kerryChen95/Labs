@@ -1,13 +1,6 @@
-var path = require('path');
+var routes201303 = require('./201303.js')
 
-exports['cross-origin'] = function(app){
-	// receive cross-origin request
-	app.get('/xhr', function (req, res) {
-		console.log('Receive cross-origin XHR request, query string: ', req.query);
-		res.send(200, 'Received cross-origin XHR request');
-	});
-	app.get('/img', function (req, res) {
-		console.log('Receive cross-origin image request, query string is: ', req.query);
-	  res.sendfile(path.join(app.get('root path'), 'public/images/kerry95.jpg'));
-	});
+exports.index = function(app){
+	// add routes written in 2013/03
+	routes201303.index(app);
 };
