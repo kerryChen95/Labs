@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>input email</title>
+</head>
+<body>
+	<form action="">
+		<label for="email">email:</label>
+		<input type="email" id="email">
+		<input type="submit" value="submit">
+	</form>
+	<script>
+	(function () {
+		var emailField = document.querySelector('#email');
+		
+		console.log(emailField.pattern);
+
+		var i = 0;
+		emailField.addEventListener('input', function () {
+			console.log(emailField.value, emailField.checkValidity());
+
+			if (emailField.checkValidity()) {
+				emailField.setCustomValidity('');
+			} else {
+				emailField.setCustomValidity('Email invalid! Input again!');
+			}
+		});
+	})();
+	// 只要调用了setCustomValidity()，并且自定义反馈信息是非空字符串的时候，
+	// 不管emailField.value是什么，
+	// emailField.checkValidity()返回的都是false；
+	// 要返回true，必要条件之一是用setCustomValidity()把自定义反馈信息设置为空字符串。
+	// 所以，如果要用setCustomValidity()来自定义反馈信息的话，
+	// 就不要依赖checkValidity()来判断用户输入是否正确
+	</script>
+</body>
+</html>
