@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>whether functions that are not source element create properties on variable object</title>
+</head>
+<body>
+	<h1>whether functions that are not source element create properties on <a href="http://dmitrysoshnikov.com/ecmascript/chapter-2-variable-object/">variable object</a></h1>
+	<p><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Functions_and_function_scope#Function_constructor_vs._function_declaration_vs._function_expression">A "source element" is a non-nested statement that is directly in the script or a function body</a></p>
+	<script>
+	if (true) {
+		// not directly in the script,
+		// instead in a code block that will execute
+		function func1 () {
+			alert(arguments);
+		}
+	}
+	if (false) {
+		// not directly in the script,
+		// instead in a code blcok that never execute
+		function func2 () {
+			alert(arguments);
+		}
+	}
+	alert('func1 create property on variable object: ' + (typeof func1 === 'function')); // true in Chrome 26, IE 9, Firefox 19
+	alert('func2: ' + (typeof func2 === 'function')); // false in Firefox 19; true in Chrome 26, IE 9
+
+	(function () {
+		if (true) {
+			// not directly in a function body,
+			// instead in a code block that will execute
+			function func3 () {
+				alert(arguments);
+			}
+		}
+		if (false) {
+			// not directly in a function body,
+			// instead in a code blcok that never execute
+			function func4 () {
+				alert(arguments);
+			}
+		}
+		alert('func3: ' + (typeof func3 === 'function')); // true in Chrome 26, IE 9, Firefox 19
+		alert('func4: ' + (typeof func4 === 'function')); // false in Firefox 19; true in Chrome 26, IE 9
+	})();
+	/*
+	As a result, never write "function declaration" not directly in script or any function body (although they are not function declaratoin in fact), otherwise your codes will behave differently according to JavaScript engines.
+	*/
+	</script>
+</body>
+</html>
