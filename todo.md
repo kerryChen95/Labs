@@ -1,5 +1,8 @@
 # Todo
 
+- [x] script markup's compatible load event
+	- [x] dev
+	- [x] test
 - [ ] XHR2 progress events
 	- [ ] Drag-and-Drop then upload progressly
 - [ ] XHR `onreadystatechange` event

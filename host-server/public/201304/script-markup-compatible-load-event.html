@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>script markup's compatible load event</title>
+</head>
+<body>
+	<script>
+	function loadScript (url, callback, context, args) {
+		var script = document.createElement('script');
+
+		callback = callback || function () {};
+
+		if (script.readyState) {
+			// IE
+			script.onreadystatechange = function () {
+				// IE9: loading -> loaded
+				if (script.readyState === 'loaded' || script.readyState === 'complete') {
+					script.onreadystatechange = null;
+					callback.apply(context || null, args);
+				}
+			}
+		} else {
+			script.onload = function () {
+				callback.apply(context || null, args);
+			}
+		}
+
+		script.src = url;
+
+		document.head.appendChild(script);
+	}
+
+	// test
+	(function () {
+		var crossOrigin = location.protocol + '//' + location.hostname + ':3001',
+			path = location.pathname.match(/^(\/\d{1,6}\/)[a-z|A-Z|-]+\.html$/);
+
+		if (path === null) path = '/';
+		else path = path[1];
+
+		loadScript(crossOrigin + path + 'script-markup-src.js', function () {
+			console.log('cross-origin script loaded!');
+		});
+		loadScript(path + 'script-markup-src.js', function () {
+			console.log('same-origin script loaded!');
+		});
+	})();
+	</script>
+</body>
+</html>
