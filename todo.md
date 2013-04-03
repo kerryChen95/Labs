@@ -24,7 +24,7 @@
 - [ ] cross-origin
 	- [x] by normal XHR
 	- [x] by `img` tag
-	- [ ] by `script` tag, JSONP
+	- [x] by `script` tag, JSONP
 	- [ ] by `iframe` tag
 	- [ ] by CORS
 	- [ ] by HTTP header `Access-Control-Allow-Origin` of host origin
