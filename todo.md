@@ -3,6 +3,7 @@
 - [x] script markup's compatible load event
 	- [x] dev
 	- [x] test
+- [x] add util: invoke callback as soon as possible after document is ready for manipulation
 - [ ] XHR2 progress events
 	- [ ] Drag-and-Drop then upload progressly
 - [ ] XHR `onreadystatechange` event
