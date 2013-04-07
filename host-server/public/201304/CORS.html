@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>cross-origin by CORS</title>
+</head>
+<body>
+	<script>
+		function createCORSRequest (method, url) {
+			var request = new XMLHttpRequest();
+			if ('withCredentials' in request) {
+				request.open(method, url);
+			} else if (typeof XDomainRequest === 'function') {
+				request = new XDomainRequest();
+				request.open(method, url);
+			} else {
+				request = null;
+			}
+			return request;
+		}
+		function encodeGetData (data) {
+			var pairs, name, value;
+			pairs = [];
+			for (name in data) {
+				if (!data.hasOwnProperty(name)) continue;
+				value = data[name];
+				value = encodeURIComponent();
+				name = encodeURIComponent();
+				pairs.push(name + '=' + value);
+			}
+			return pairs.join('&');
+		}
+
+		var crossOrigin = 'http://localhost:3001/cors?';
+
+		(function () {
+			var data = { hello: 'I am cross-origin GET request by CORS' };
+			var cors = createCORSRequest('GET', crossOrigin + encodeGetData(data));
+			if (!cors) return;
+			cors.onload = function () {
+				console.log('GET CORS response: ', cors.responseText);
+			};
+			cors.send();
+		})();
+
+		(function () {
+			var cors = createCORSRequest('POST', crossOrigin);
+			if (!cors) return;
+			cors.onload = function () {
+				console.log('POST CORS response: ', cors.responseText);
+			};
+			cors.send({ hello: 'I am cross-origin POST request by CORS' });
+		})();
+	</script>
+</body>
+</html>
