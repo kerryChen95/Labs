@@ -3,7 +3,11 @@
 - [x] script markup's compatible load event
 	- [x] dev
 	- [x] test
+- [ ] add unit-test framework
+- [ ] HTML5 API
+	- [ ] Drag-and-Drop
 - [x] add util: invoke callback as soon as possible after document is ready for manipulation
+- [ ] real time communication
 - [ ] XHR2 progress events
 	- [ ] Drag-and-Drop then upload progressly
 - [ ] XHR `onreadystatechange` event
@@ -12,6 +16,9 @@
 	- [ ] Reset
 	- [ ] When cross-origin
 	- [ ] `onreadystatechange` event handler is called asynchronous or not?
+- [ ] XHR timeout and abort
+- [ ] XHR2 timeout
+- [ ] XHR abort for auto-complete suggestions
 - [ ] form data
 	- [ ] encode form-data
 		- [x] dev
@@ -28,4 +35,8 @@
 	- [x] by `script` tag, JSONP
 	- [ ] by `iframe` tag
 	- [ ] by CORS
-	- [ ] by HTTP header `Access-Control-Allow-Origin` of host origin
+	- [ ] by modify `document.host`
+
+## Doubt
+
+- Would those objects that are not being referenced but making networking interactive be garbage collected?
