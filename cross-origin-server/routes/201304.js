@@ -12,4 +12,18 @@ exports.index = function (app) {
 		res.set('Content-Type', 'application/json');
 		res.send(200, callback + '(' + response + ')');
 	});
+
+	// JSONM
+	app.get('/jsonm', function (req, res) {
+		var callback = req.query['callback'],
+			response = {
+				'jsonm': 'awesome!'
+			};
+
+		console.log('JSONM callback function name: ', callback);
+
+		response = JSON.stringify(response);
+		res.set('Content-Type', 'application/json');
+		res.send(200, callback + '(' + response + ')');
+	});
 };
