@@ -5,22 +5,8 @@
 	<title>Encoding Request</title>
 </head>
 <body>
+	<script src="../util/encode-form-data.js"></script>
 	<script>
-	function encodeFormData (data) {
-		var pairs, name, value;
-		if (typeof data !== 'object') return '';
-		pairs = [];
-		for (name in data) {
-			value = data[name];
-			if (data.hasOwnProperty(name) && typeof value !== 'function') {
-				value = value.toString();
-				value = encodeURIComponent(value.replace(' ', '+'));
-				name = encodeURIComponent(name.replace(' ', '+'));
-				pairs.push(name + '=' + value);
-			}
-		}
-		return pairs.join('&');
-	}
 	function ajaxGet (url, data, success) {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function () {
