@@ -1,16 +1,49 @@
-function encodeFormData (data) {
-	var pairs, name, value;
+// Encode XHR data that is used as form data
+// with HTTP header `Content-Type` as `application/x-www-form-urlencoded`,
+// or as `multipart/form-data; boundary=<boundary>` if `boundary` is provided
+function encodeFormData (data, boundary) {
+	var parts, name, value;
 	// ensure `data` contains key/value pairs
 	// due to form data is always key/value pairs,
 	// but always return a string
 	if (Object.prototype.toString.call(data) !== '[object Object]') return '';
-	pairs = [];
-	for (name in data) {
-		value = data[name];
-		if (!data.hasOwnProperty(name) || typeof value === 'functoin') continue;
-		name = encodeURIComponent(name.replace(' ', '+'));
-		value = encodeURIComponent(value.toString().replace(' ', '+'));
-		pairs.push(name + '=' + value);
+
+	parts = [];
+
+	// Encode according to http://www.w3.org/TR/html401/interact/forms.html#didx-applicationx-www-form-urlencoded,
+	// but space charactor is not replaced by '+'
+	if (!boundary) {
+		for (name in data) {
+			value = data[name];
+			if (!data.hasOwnProperty(name) || typeof value === 'functoin') continue;
+			name = encodeURIComponent(name);
+			// name = encodeURIComponent(name.replace(/\s{1}/g, '+'));
+			value = encodeURIComponent(value.toString());
+			// value = encodeURIComponent(value.toString().replace(/\s{1}/g, '+'));
+			parts.push(name + '=' + value);
+		}
+		return parts.join('&');
 	}
-	return pairs.join('&');
+	// Encode according to http://www.w3.org/TR/html401/interact/forms.html#didx-applicationx-www-form-urlencoded#didx-multipartform-data,
+	// but not support file currently
+	else {
+		boundary = '--' + boundary + '\n';
+
+		for (name in data) {
+			value = data[name];
+			if (!data.hasOwnProperty(name) || typeof value === 'function') continue;
+			value = value.toString();
+			parts.push('Content-Disposition: form-data; name="' + name + '"\n\n' + value + '\n');
+		}
+
+		if (parts.length === 0) {
+			return '';
+		}
+		else {
+			parts = parts.join(boundary);
+			parts = boundary + parts;
+			parts += boundary.slice(0, -1) + '--';
+			return parts;
+		}
+	}
 }
