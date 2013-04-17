@@ -46,3 +46,4 @@
 ## Doubt
 
 - Would those objects that are not being referenced but making networking interactive be garbage collected?
+- Why replace `' '` with `'+'` before pass to `encodeURIComponent`
