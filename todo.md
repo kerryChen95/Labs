@@ -35,6 +35,12 @@
 	- [x] by `script` tag, JSONP
 	- [ ] by `iframe` tag
 	- [ ] by CORS
+		- [x] GET
+		- [x] POST with `application/x-www-form-urlencoded`
+		- [x] POST with `multipart/form-data`
+		- [x] POST with `text/plain`
+		- [x] preflight
+		- [ ] in IE 8, 9
 	- [ ] by modify `document.host`
 
 ## Doubt

@@ -1,8 +1,12 @@
 // Encode XHR data that is used as form data
 // with HTTP header `Content-Type` as `application/x-www-form-urlencoded`,
 // or as `multipart/form-data; boundary=<boundary>` if `boundary` is provided
+
 function encodeFormData (data, boundary) {
 	var parts, name, value;
+	// **NOTE**:
+	// use the decoding of `%0D%0A` to break line in HTTP message body
+	var lineBreaker = decodeURIComponent('%0D%0A');
 	// ensure `data` contains key/value pairs
 	// due to form data is always key/value pairs,
 	// but always return a string
@@ -27,13 +31,13 @@ function encodeFormData (data, boundary) {
 	// Encode according to http://www.w3.org/TR/html401/interact/forms.html#didx-applicationx-www-form-urlencoded#didx-multipartform-data,
 	// but not support file currently
 	else {
-		boundary = '--' + boundary + '\n';
+		boundary = '--' + boundary + lineBreaker;
 
 		for (name in data) {
 			value = data[name];
 			if (!data.hasOwnProperty(name) || typeof value === 'function') continue;
 			value = value.toString();
-			parts.push('Content-Disposition: form-data; name="' + name + '"\n\n' + value + '\n');
+			parts.push('Content-Disposition: form-data; name="' + name + '"' + lineBreaker + lineBreaker + value + lineBreaker);
 		}
 
 		if (parts.length === 0) {
@@ -42,7 +46,7 @@ function encodeFormData (data, boundary) {
 		else {
 			parts = parts.join(boundary);
 			parts = boundary + parts;
-			parts += boundary.slice(0, -1) + '--';
+			parts += boundary.slice(0, lineBreaker.length * -1) + '--';
 			return parts;
 		}
 	}
