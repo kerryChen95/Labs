@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<meta charset="UTF-8">
-	<title>Encoding Request</title>
+  <meta charset="UTF-8">
+  <title>Encoding Request</title>
 </head>
 <body>
-	<script src="../util/encode-form-data.js"></script>
-	<script>
-	function ajaxGet (url, data, success) {
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function () {
-			if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status <= 299 && typeof success === 'function') {
-				success(xhr);
-			}
-		}
-		xhr.open('GET', url + '?' + encodeFormData(data));
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.send();
-	}
-	function ajaxPost (url, data, success) {
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function () {
-			if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status <= 299 && typeof success === 'function') {
-				success(xhr);
-			}
-		};
-		xhr.open('POST', url);
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.send(encodeFormData(data));
-	}
-	</script>
+  <script src="../util/encode-form-data.js"></script>
+  <script>
+  function ajaxGet (url, data, success) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status <= 299 && typeof success === 'function') {
+        success(xhr);
+      }
+    }
+    xhr.open('GET', url + '?' + encodeFormData(data));
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+  }
+  function ajaxPost (url, data, success) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status <= 299 && typeof success === 'function') {
+        success(xhr);
+      }
+    };
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(encodeFormData(data));
+  }
+  </script>
 </body>
 </html>

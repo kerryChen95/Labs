@@ -1,81 +1,81 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<meta charset="UTF-8">
-	<title>Move specific elements to the end</title>
+  <meta charset="UTF-8">
+  <title>Move specific elements to the end</title>
 </head>
 <body>
-	<p>给定一个数组，arr = ["zero",one","two","three","four","five","six","seven"]，请将arr的元素中含有字符串“o”的元素从原位置删除，添加到arr尾部，期望的结果像这样：["three","six","seven","zero","one","two","four"]。</p>
-	<script>
-	// 给定数组的元素值一定是字符串
-	var arr = ["zero","one","two","three","four","five","six","seven"];
+  <p>给定一个数组，arr = ["zero",one","two","three","four","five","six","seven"]，请将arr的元素中含有字符串“o”的元素从原位置删除，添加到arr尾部，期望的结果像这样：["three","six","seven","zero","one","two","four"]。</p>
+  <script>
+  // 给定数组的元素值一定是字符串
+  var arr = ["zero","one","two","three","four","five","six","seven"];
 
-	// way 1:
-	// but this way's time complexity is n^2
-	function holdInPlace (arr) {
-		var tmp;
-		// shallow copy to not modify original array
-		arr = arr.slice();
-		for (tmp in arr) {
-			if (arr[tmp].indexOf('o') !== -1) {
-				arr.push(arr[tmp]);
-				arr[tmp] = void 0;
-			}
-		}
-		tmp = arr.length - 1;
-		while (tmp--) {
-			if (arr[tmp] === void 0) {
-				arr.splice(tmp, 1);
-			}
-		}
-		return arr;
-	}
-	console.log( holdInPlace(arr) ); // [ 'three', 'five', 'six', 'seven', 'zero', 'one', 'two', 'four' ]
+  // way 1:
+  // but this way's time complexity is n^2
+  function holdInPlace (arr) {
+    var tmp;
+    // shallow copy to not modify original array
+    arr = arr.slice();
+    for (tmp in arr) {
+      if (arr[tmp].indexOf('o') !== -1) {
+        arr.push(arr[tmp]);
+        arr[tmp] = void 0;
+      }
+    }
+    tmp = arr.length - 1;
+    while (tmp--) {
+      if (arr[tmp] === void 0) {
+        arr.splice(tmp, 1);
+      }
+    }
+    return arr;
+  }
+  console.log( holdInPlace(arr) ); // [ 'three', 'five', 'six', 'seven', 'zero', 'one', 'two', 'four' ]
 
-	// way 2:
-	// 这种方式可以说是way 1的优化：
-	// 在从原数组删除含有"o"的元素时，不是通过就地放占位元素来维持原数组索引，而是放在数组头，这样这些稍后需要删除的占位元素就是连续的。
-	// 而含有"o"的元素保存在临时数组里，其长度正好表示原数组中的占位元素长度。
-	function holdPlaceAtHead (arr) {
-		var tmp = [], i = -1;
-		arr = arr.slice();
-		while (++i < arr.length) {
-			if (arr[i].indexOf('o') !== -1) {
-				tmp = tmp.concat( arr.splice(i, 1) );
-				arr.unshift(undefined);
-			}
-		}
-		if (tmp.length) {
-			arr.splice(0, tmp.length);
-			arr = arr.concat(tmp);
-		}
-		return arr;
-	};
-	console.log( holdPlaceAtHead(arr) );
+  // way 2:
+  // 这种方式可以说是way 1的优化：
+  // 在从原数组删除含有"o"的元素时，不是通过就地放占位元素来维持原数组索引，而是放在数组头，这样这些稍后需要删除的占位元素就是连续的。
+  // 而含有"o"的元素保存在临时数组里，其长度正好表示原数组中的占位元素长度。
+  function holdPlaceAtHead (arr) {
+    var tmp = [], i = -1;
+    arr = arr.slice();
+    while (++i < arr.length) {
+      if (arr[i].indexOf('o') !== -1) {
+        tmp = tmp.concat( arr.splice(i, 1) );
+        arr.unshift(undefined);
+      }
+    }
+    if (tmp.length) {
+      arr.splice(0, tmp.length);
+      arr = arr.concat(tmp);
+    }
+    return arr;
+  };
+  console.log( holdPlaceAtHead(arr) );
 
-	// way 3:
-	// `sort` 方法的两个参数，在原数组中的先后顺序取决于实现：
-	// Chrome26中 `a` 在 `b` 前，IE9反之。
-	// 而且，ES5规范中：the sort is not necessarily stable (that is, elements that compare equal do not necessarily remain in their original order)。
-	// 所以返回0不能保证两个元素的相对顺序不变。但在Chrome26, Firefox19, IE9的实现中，返回0，两者的相对顺序不变。
-	// conditions and return value table as below:
-	// a.indexOf('o')			b.indexOf('o')				return
-	// >=0								>=0										0
-	// >=0								-1										>0
-	// -1									>=0										<0
-	// -1									-1										0
-	function sort (arr) {
-		arr = arr.slice();
-		return arr.sort(function (a, b) {
-			// whether contain sub-string 'o':
-			// 1 means yes, 0 mean no.
-			a = a.indexOf('o') >= 0 ? true : false;
-			b = b.indexOf('o') >= 0 ? true : false;
-			if (a === b) return 0;
-			else return a ? 1 : -1;
-		});
-	}
-	console.log( sort(arr) ); // [ 'three', 'five', 'six', 'seven', 'zero', 'one', 'two', 'four' ]
-	</script>
+  // way 3:
+  // `sort` 方法的两个参数，在原数组中的先后顺序取决于实现：
+  // Chrome26中 `a` 在 `b` 前，IE9反之。
+  // 而且，ES5规范中：the sort is not necessarily stable (that is, elements that compare equal do not necessarily remain in their original order)。
+  // 所以返回0不能保证两个元素的相对顺序不变。但在Chrome26, Firefox19, IE9的实现中，返回0，两者的相对顺序不变。
+  // conditions and return value table as below:
+  // a.indexOf('o')     b.indexOf('o')        return
+  // >=0                >=0                   0
+  // >=0                -1                    >0
+  // -1                 >=0                   <0
+  // -1                 -1                    0
+  function sort (arr) {
+    arr = arr.slice();
+    return arr.sort(function (a, b) {
+      // whether contain sub-string 'o':
+      // 1 means yes, 0 mean no.
+      a = a.indexOf('o') >= 0 ? true : false;
+      b = b.indexOf('o') >= 0 ? true : false;
+      if (a === b) return 0;
+      else return a ? 1 : -1;
+    });
+  }
+  console.log( sort(arr) ); // [ 'three', 'five', 'six', 'seven', 'zero', 'one', 'two', 'four' ]
+  </script>
 </body>
 </html>

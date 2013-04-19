@@ -1,58 +1,58 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<meta charset="UTF-8">
-	<title>JSONP</title>
+  <meta charset="UTF-8">
+  <title>JSONP</title>
 </head>
 <body>
-	<script>
-	var getJSONP = (function (global) {
-		var counter = 0, callback = 'jsonpCB';
+  <script>
+  var getJSONP = (function (global) {
+    var counter = 0, callback = 'jsonpCB';
 
-		// `url` should not contain hash
-		function getJSONP (url, success, context) {
-			var script;
+    // `url` should not contain hash
+    function getJSONP (url, success, context) {
+      var script;
 
-			// create an unique property name on global object
-			do {
-				callback += counter++;
-			} while (typeof global[callback] !== 'undefined')
-			global[callback] = function (response) {
-				// no matter whether throw an error,
-				// remove the unique property name on global object
-				// and the temporary script tag.
-				try {
-					success.apply( context || null, arguments );
-				} finally {
-					delete global[callback];
-					script.parentNode.removeChild(script);
-				}
-			}
+      // create an unique property name on global object
+      do {
+        callback += counter++;
+      } while (typeof global[callback] !== 'undefined')
+      global[callback] = function (response) {
+        // no matter whether throw an error,
+        // remove the unique property name on global object
+        // and the temporary script tag.
+        try {
+          success.apply( context || null, arguments );
+        } finally {
+          delete global[callback];
+          script.parentNode.removeChild(script);
+        }
+      }
 
-			// create JSONP url
-			if (url.indexOf('?') === -1) {
-				url += '?';
-			} else {
-				url += '&';
-			}
-			url += 'jsonp=' + callback;
+      // create JSONP url
+      if (url.indexOf('?') === -1) {
+        url += '?';
+      } else {
+        url += '&';
+      }
+      url += 'jsonp=' + callback;
 
-			script = document.createElement('script');
-			script.src = url;
-			document.head.appendChild(script);
-		}
+      script = document.createElement('script');
+      script.src = url;
+      document.head.appendChild(script);
+    }
 
-		return getJSONP;
-	})(window);
+    return getJSONP;
+  })(window);
 
-	// test
-	(function () {
-		var crossOrigin = 'http://localhost:3001/jsonp';
+  // test
+  (function () {
+    var crossOrigin = 'http://localhost:3001/jsonp';
 
-		getJSONP(crossOrigin, function (data) {
-			console.log('The cross-origin data get by JSONP: ', data);
-		});
-	})();
-	</script>
+    getJSONP(crossOrigin, function (data) {
+      console.log('The cross-origin data get by JSONP: ', data);
+    });
+  })();
+  </script>
 </body>
 </html>

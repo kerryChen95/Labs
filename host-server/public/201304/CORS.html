@@ -1,116 +1,116 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<meta charset="UTF-8">
-	<title>cross-origin by CORS</title>
+  <meta charset="UTF-8">
+  <title>cross-origin by CORS</title>
 </head>
 <body>
-	<h1>cross-origin by CORS</h1>
-	<h2>BUG</h2>
-	<ul>
-		<li>
-			<p>When send POST request with `Content-Type` header as `text/plain`, server-end can not parse request body correctly.Maybe my encoding or server-end's body parser is wrong.</p>
-		</li>
-	</ul>
-	<form action="http://localhost:3001/cors" method="POST" enctype="text/plain">
-		<input type="hidden" name="I am" value="POST request with Content-Type as text/plain">
-		<input type="submit" value="submit as text/plain">
-	</form>
-	<form action="http://localhost:3001/cors" method="POST" enctype="multipart/form-data">
-		<!-- <input type="hidden" name="I am" value="POST request with Content-Type as application/x-www-form-urlencoded"> -->
-		<input type="hidden" name="func" value="function () { return 1 + 1}">
-		<input type="submit" value="submit as multipart/form-data">
-	</form>
-	<script src="../util/encode-form-data.js"></script>
-	<script>
-		var crossOrigin = 'http://localhost:3001/cors';
+  <h1>cross-origin by CORS</h1>
+  <h2>BUG</h2>
+  <ul>
+    <li>
+      <p>When send POST request with `Content-Type` header as `text/plain`, server-end can not parse request body correctly.Maybe my encoding or server-end's body parser is wrong.</p>
+    </li>
+  </ul>
+  <form action="http://localhost:3001/cors" method="POST" enctype="text/plain">
+    <input type="hidden" name="I am" value="POST request with Content-Type as text/plain">
+    <input type="submit" value="submit as text/plain">
+  </form>
+  <form action="http://localhost:3001/cors" method="POST" enctype="multipart/form-data">
+    <!-- <input type="hidden" name="I am" value="POST request with Content-Type as application/x-www-form-urlencoded"> -->
+    <input type="hidden" name="func" value="function () { return 1 + 1}">
+    <input type="submit" value="submit as multipart/form-data">
+  </form>
+  <script src="../util/encode-form-data.js"></script>
+  <script>
+    var crossOrigin = 'http://localhost:3001/cors';
 
-		// cross-origin GET request by CORS,
-		// does not preflight
-		(function () {
-			var data = { 'I am': 'cross-origin GET request by CORS' };
-			var cors = new XMLHttpRequest();
-			cors.open('GET', crossOrigin + '?' + encodeFormData(data));
+    // cross-origin GET request by CORS,
+    // does not preflight
+    (function () {
+      var data = { 'I am': 'cross-origin GET request by CORS' };
+      var cors = new XMLHttpRequest();
+      cors.open('GET', crossOrigin + '?' + encodeFormData(data));
 
-			cors.onreadystatechange = function () {
-				if (cors.readyState === cors.DONE && cors.status >= 200 && cors.status <= 299) {
-					console.log(cors.responseText);
-				}
-			}
-			cors.send();
-		})();
+      cors.onreadystatechange = function () {
+        if (cors.readyState === cors.DONE && cors.status >= 200 && cors.status <= 299) {
+          console.log(cors.responseText);
+        }
+      }
+      cors.send();
+    })();
 
-		// cross-origin POST request by CORS
-		// whose `Content-Type` is `application/x-www-form-urlencoded`, `multipart/form-data`, or `text/plain`
-		// is not preflighted.
-		(function () {
-			// **BUG**:
-			// In the case of `text/plain`, server-end can not parse POST body correctly.
-			var MIMEs = ['application/x-www-form-urlencoded', 'multipart/form-data', 'text/plain'];
-			var i;
-			function createBoundary (data) {
-				var boundary, name, value, unique;
-				do {
-					boundary = Math.random();
-					unique = true;
-					for (name in data) {
-						if (!data.hasOwnProperty(name)) continue;
-						value = data[name].toString();
-						if (value.indexOf(boundary) >= 0 || name.indexOf(boundary) >= 0) {
-							unique = false;
-							break;
-						}
-					}
-				}
-				while (!unique)
-				return boundary;
-			}
+    // cross-origin POST request by CORS
+    // whose `Content-Type` is `application/x-www-form-urlencoded`, `multipart/form-data`, or `text/plain`
+    // is not preflighted.
+    (function () {
+      // **BUG**:
+      // In the case of `text/plain`, server-end can not parse POST body correctly.
+      var MIMEs = ['application/x-www-form-urlencoded', 'multipart/form-data', 'text/plain'];
+      var i;
+      function createBoundary (data) {
+        var boundary, name, value, unique;
+        do {
+          boundary = Math.random();
+          unique = true;
+          for (name in data) {
+            if (!data.hasOwnProperty(name)) continue;
+            value = data[name].toString();
+            if (value.indexOf(boundary) >= 0 || name.indexOf(boundary) >= 0) {
+              unique = false;
+              break;
+            }
+          }
+        }
+        while (!unique)
+        return boundary;
+      }
 
-			for (i = 0; i < MIMEs.length; ++i) {
-				(function (i) {
-					var cors, body, boundary;
-					cors = new XMLHttpRequest();
-					cors.open('POST', crossOrigin);
+      for (i = 0; i < MIMEs.length; ++i) {
+        (function (i) {
+          var cors, body, boundary;
+          cors = new XMLHttpRequest();
+          cors.open('POST', crossOrigin);
 
-					cors.onreadystatechange = function () {
-						if (cors.readyState === cors.DONE && cors.status >= 200 && cors.status <= 299) {
-							console.log(cors.responseText);
-						}
-					}
-					body = {
-						'I am': 'cross-origin POST request by CORS with Content-Type as ' + MIMEs[i]
-					};
+          cors.onreadystatechange = function () {
+            if (cors.readyState === cors.DONE && cors.status >= 200 && cors.status <= 299) {
+              console.log(cors.responseText);
+            }
+          }
+          body = {
+            'I am': 'cross-origin POST request by CORS with Content-Type as ' + MIMEs[i]
+          };
 
-					if (MIMEs[i] === 'multipart/form-data') {
-						boundary = createBoundary(body);
-						cors.setRequestHeader('Content-Type', MIMEs[i] + '; boundary=' + boundary);
-						cors.send( encodeFormData(body, boundary) );
-					}
-					else {
-						cors.setRequestHeader('Content-Type', MIMEs[i]);
-						cors.send( encodeFormData(body) );
-					}
-				})(i);
-			}
-		})();
+          if (MIMEs[i] === 'multipart/form-data') {
+            boundary = createBoundary(body);
+            cors.setRequestHeader('Content-Type', MIMEs[i] + '; boundary=' + boundary);
+            cors.send( encodeFormData(body, boundary) );
+          }
+          else {
+            cors.setRequestHeader('Content-Type', MIMEs[i]);
+            cors.send( encodeFormData(body) );
+          }
+        })(i);
+      }
+    })();
 
-		// cross-origin POST request by CORS
-		// whose `Content-Type` is something other than `application/x-www-form-urlencoded`, `multipart/form-data`, and `text/plain`,
-		// preflight,
-		// and `XDomainRequest` dose not support such `Content-Type`
-		(function () {
-			var cors = new XMLHttpRequest();
-			cors.open('POST', crossOrigin);
-			cors.onreadystatechange = function () {
-				if (cors.readyState === cors.DONE && cors.status >= 200 && cors.status <= 299) {
-					console.log(cors.responseText);
-				}
-			};
-			cors.setRequestHeader('Content-Type', 'application/json');
-			cors.send( JSON.stringify({
-				'I am': 'cross-origin POSR request by CORS with Content-Type as application/json'
-			}) );
-		})();
-	</script>
+    // cross-origin POST request by CORS
+    // whose `Content-Type` is something other than `application/x-www-form-urlencoded`, `multipart/form-data`, and `text/plain`,
+    // preflight,
+    // and `XDomainRequest` dose not support such `Content-Type`
+    (function () {
+      var cors = new XMLHttpRequest();
+      cors.open('POST', crossOrigin);
+      cors.onreadystatechange = function () {
+        if (cors.readyState === cors.DONE && cors.status >= 200 && cors.status <= 299) {
+          console.log(cors.responseText);
+        }
+      };
+      cors.setRequestHeader('Content-Type', 'application/json');
+      cors.send( JSON.stringify({
+        'I am': 'cross-origin POSR request by CORS with Content-Type as application/json'
+      }) );
+    })();
+  </script>
 </body>
 </html>

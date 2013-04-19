@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<meta charset="UTF-8">
-	<title>Entering the execution context</title>
+  <meta charset="UTF-8">
+  <title>Entering the execution context</title>
 </head>
 <body>
-	<p>当进入一个执行上下文的时候：</p>
-	<ul>
-		<li>先为每一个形参（如果有的话）在变量对象上添加一个同名属性，值为实参或 `undefined` </li>
-		<li>再为每一个函数声明在变量对象上添加一个同名属性，值为所创建的函数对象的引用，如果已有同名属性存在，可以覆盖该属性的值和attribute</li>
-		<li>然后为每一个变量声明在变量对象上添加一个同名属性，值为 `undefined` ，如果已有同名属性存在，不影响原有属性。</li>
-	</ul>
-	<script>
-	(function (foo, bar) {
-		function foo () {}
-		var foo;
-		var bar;
-		alert('foo\'s type: ' + typeof foo); // output: function
-		alert('bar\'s type: ' + typeof bar); // output: number
-		// test in Chrome26, Firefox19, IE9
-	})(1, 2);
-	</script>
+  <p>当进入一个执行上下文的时候：</p>
+  <ul>
+    <li>先为每一个形参（如果有的话）在变量对象上添加一个同名属性，值为实参或 `undefined` </li>
+    <li>再为每一个函数声明在变量对象上添加一个同名属性，值为所创建的函数对象的引用，如果已有同名属性存在，可以覆盖该属性的值和attribute</li>
+    <li>然后为每一个变量声明在变量对象上添加一个同名属性，值为 `undefined` ，如果已有同名属性存在，不影响原有属性。</li>
+  </ul>
+  <script>
+  (function (foo, bar) {
+    function foo () {}
+    var foo;
+    var bar;
+    alert('foo\'s type: ' + typeof foo); // output: function
+    alert('bar\'s type: ' + typeof bar); // output: number
+    // test in Chrome26, Firefox19, IE9
+  })(1, 2);
+  </script>
 </body>
 </html>

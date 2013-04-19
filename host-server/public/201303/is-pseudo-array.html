@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<meta charset="UTF-8">
-	<title>is pseudo array</title>
+  <meta charset="UTF-8">
+  <title>is pseudo array</title>
 </head>
 <body>
-	<script>
-	function isArrayLike(o){
-		if(o
-			// check type
-			&& typeof o === "object"
-			// check `length` property to be number
-			&& typeof o.length === 'number'
-			// be non-negative integer
-			&& Math.floor(o.length) === o.length
-			&& o.length >= 0
-			&& o.length < Number.MAX_VALUE
-			)
-			return true;
-		else
-			return false;
-	}
+  <script>
+  function isArrayLike(o){
+    if(o
+      // check type
+      && typeof o === "object"
+      // check `length` property to be number
+      && typeof o.length === 'number'
+      // be non-negative integer
+      && Math.floor(o.length) === o.length
+      && o.length >= 0
+      && o.length < Number.MAX_VALUE
+      )
+      return true;
+    else
+      return false;
+  }
 
-	(function () {
-		var realArr = [];
-		alert( isArrayLike(realArr) );
-		alert( isArrayLike() );
-	})(1, 2, 'foo');
-	</script>
+  (function () {
+    var realArr = [];
+    alert( isArrayLike(realArr) );
+    alert( isArrayLike() );
+  })(1, 2, 'foo');
+  </script>
 </body>
 </html>
