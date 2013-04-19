@@ -23,7 +23,7 @@
 	- [ ] encode form-data
 		- [x] dev
 		- [ ] test
-	- [ ] using XHR2 `FomeData` for mulitipart form-data
+	- [ ] using XHR2 `FormData` for mulitipart form-data
 		- [x] dev
 		- [ ] test
 - [ ] encode form-data
