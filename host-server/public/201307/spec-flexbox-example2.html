@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  <div style="display:-webkit-flex;-webkit-flex-direction:row">
+
+      <!-- flex item: block child -->
+      <div id="item1">block</div>
+
+      <!-- flex item: floated element; floating is ignored -->
+      <div id="item2" style="float: left;">float</div>
+
+      <!-- flex item: anonymous block box around inline content -->
+      anonymous item 3
+
+      <!-- flex item: inline child -->
+      <span>
+          item 4
+          <!-- flex items do not split around blocks -->
+          <div id="not-an-item">item 4</div>
+          item 4
+      </span>
+  </div>
+</body>
+</html>
