@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>cavas compress image</title>
+</head>
+<body>
+  <input type="file" id="inp_file"><br>
+  <label for="inp_ratio">compress ratio(between 0 and 1)</label><input type="text" id="inp_ratio"><br>
+  <button id="btn_compress">compress</button><br>
+  <script>
+    document.getElementById('btn_compress').addEventListener('click', function(){
+      var fr = new FileReader(),
+        inp_file = document.getElementById('inp_file');
+      fr.onload = function(e){
+        var img = new Image();
+        img.onload = function(){
+          var originWidth = parseInt(this.width),
+            originHeight = parseInt(this.height),
+            canvas = document.createElement('canvas'),
+            ratio = parseFloat(document.getElementById('inp_ratio').value),
+            img2 = new Image()
+
+          canvas.width = originWidth;
+          canvas.height = originHeight;
+          canvas.getContext('2d').drawImage(this, 0, 0, originWidth, originHeight);
+          img2.src = canvas.toDataURL('image/webp', ratio);
+
+          document.body.appendChild(this);
+          document.body.appendChild(img2);
+        };
+        img.src = e.target.result;
+      };
+      fr.readAsDataURL(inp_file.files[0]);
+    }, false);
+  </script>
+</body>
+</html>
