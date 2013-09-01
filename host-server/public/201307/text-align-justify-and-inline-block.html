@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>text-align: justify and inline-block</title>
+  <style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    padding-top: 100px;
+  }
+  ul {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: justify;
+  }
+  li {
+    display: inline-block;
+  }
+  #break::after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+  }
+  </style>
+</head>
+<body>
+  <p>如下：当大于1行时，非最后一行两端对齐，最后一行靠左对齐。<br>当只有一行时，相当于最后一行，靠左对齐。</p>
+  <ul>
+    <li>home</li>
+    <li>blog</li>
+    <li>gallery</li>
+    <li>news</li>
+    <li>contact</li>
+    <li>home</li>
+    <li>blog</li>
+    <li>gallery</li>
+    <li>news</li>
+    <li>contact</li>
+  </ul>
+  <p>如下：为了使只有一行时也能两端对齐，在最后一行添加一个看不见的元素占完整行，使真正的内容在非最后一行。<br>但是这样会使真正内容的最后一行（即添加透明元素后的倒数第二行）在不是第一行的时候两端对齐，而不是靠左对齐，如果这样只有一个元素，它会靠左（两端对齐的特殊情况），如果有两个及以上，会两端对齐。</p>
+  <ul id="break">
+    <li>home</li>
+    <li>blog</li>
+    <li>gallery</li>
+    <li>news</li>
+    <li>contact</li>
+    <li>home</li>
+    <li>blog</li>
+    <li>gallery</li>
+    <li>news</li>
+    <li>contact</li>
+  </ul>
+  <p>为了使真正内容的最后一行在不是第一行的时候靠左对齐，需要添加占位元素在最后，其个数等于每行最大元素个数减2<br>可以使用 media query 来确定每行宽度，进而确定每行最大元素个数，进而确定使用的占位元素个数</p>
+  <a href="http://codepen.io/patrickkunka/pen/GECBF">demo</a>
+</body>
+</html>
