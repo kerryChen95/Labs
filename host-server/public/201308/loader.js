@@ -38,7 +38,7 @@ function loadJs(url, callback){
   }
   else{
     element.onreadystatechange = function(){
-      if(/loaded|complete/.test(node.readyState)){
+      if(/loaded|complete/.test(element.readyState)){
         onload();
       }
     }
