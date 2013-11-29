@@ -9,10 +9,21 @@ var isOldWebkit = +navigator.userAgent
 var head = doc.getElementsByTagName('head')[0] || doc.documentElement;
 var baseElement = head.getElementsByTagName('base')[0];
 
+var IS_CSS_RE = /\.css(?:\?|$)/i;
+
 
 /**
  * Main function
  */
+
+function loadFile(url, callback){
+   if(IS_CSS_RE.test(url)){
+       loadCss(url, callback);
+   }
+   else{
+       loadJs(url, callback);
+   }
+}
 
 function loadJs(url, callback){
   var element = doc.createElement('script');
@@ -129,5 +140,6 @@ function checkCssLoaded(element, callback){
  */
 win.loadJs = loadJs;
 win.loadCss = loadCss;
+win.loadFile = loadFile;
 
 })(this);
