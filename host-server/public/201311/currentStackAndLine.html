@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Current Stack and Line</title>
+</head>
+<body>
+    <script type="text/javascript">
+        // Define global variable `__stack__` and `__line`
+        // for current stack and line,
+        // only work in V8.
+        (function(global){
+            Object.defineProperty(global, '__stack__', {
+                get: function(){
+                    var orig = Error.prepareStackTrace;
+                    Error.prepareStackTrace = function(_, stack){ return stack; };
+                    var err = new Error;
+                    Error.captureStackTrace(err, arguments.callee);
+                    var stack = err.stack;
+                    Error.prepareStackTrace = orig;
+                    return stack;
+                }
+            });
+         
+            Object.defineProperty(global, '__line__', {
+                get: function(){
+                    return __stack__[1].getLineNumber();
+                }
+            });
+        })(this);
+
+        // For non-V8
+        // but can not continue current excution
+        (function(global){
+            var old = global.onerror;
+
+            global.onerror = function(errMsg, url, line){
+                var oldReturn;
+                if(old) oldReturn = old.apply(global, arguments);
+                if(errMsg.indexOf('Get current line number') === -1) return;
+
+                console.log(line);
+
+                // if old error handler has return value, return it
+                if(oldReturn !== void 0){ // evaluate `undefined` that is not in global
+                    return oldReturn;
+                }
+
+                // You can return `true` or `false` to prevent unexpected default behavior,
+                // for more detail: http://stackoverflow.com/questions/8087240/if-i-override-window-onerror-in-javascript-should-i-return-true-or-false
+            };
+        })(this);
+
+        // Get current line number by such statment:
+        // throw new Error('Get current line number');
+    </script>
+</body>
+</html>
