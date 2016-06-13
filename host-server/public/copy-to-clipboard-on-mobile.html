@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1">
+  <title>copy to clipboard on mobile</title>
+</head>
+<body>
+  <h1 id="title">copy to clipboard on mobile</h1>
+  <button id="btn">copy</button>
+  <script>
+    // https://clipboardjs.com/
+    document.querySelector('#btn').addEventListener('click', function () {
+      // https://developer.mozilla.org/en/docs/Web/API/Range
+      var range = document.createRange()
+      range.selectNode(document.querySelector('#title'))
+      // https://developer.mozilla.org/en-US/docs/Web/API/Selection
+      getSelection().addRange(range)
+      // https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
+      var result = document.execCommand('copy')
+    })
+  </script>
+</body>
+</html>
