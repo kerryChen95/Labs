@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Circle List</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+    #container {
+      margin: 10px;
+      height: 500px;
+      border: 1px solid grey;
+      overflow: auto;
+    }
+    #content-provider {
+      position: relative;
+    }
+    .item {
+      height: 20px;
+      line-height: 20px;
+      width: 100%;
+      position: absolute;
+      background: greenyellow;
+    }
+    .item.even {
+      background: dodgerblue;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="content-provider"></div>
+  </div>
+  <script>
+  // create a densy array, its length is 10000 but every item is `undefined`
+  let dataList = Array.apply(null, {length: 10000})
+  dataList = dataList.map((val, index) => {
+    return {
+      index,
+      getItemInnerHtml: () => `content of item ${index}`,
+    }
+  })
+
+  // hard code each item's height.
+  // there is also an answer for variable height:
+  // you can render next batch items when scroll to the bottom
+  // and cache each rendered item's height for futhur use.
+  const itemHeight = 20
+  // hard code container's height.
+  // you can also get from DOM by `getComputedStyle()` every time you need it.
+  const containerHeight = 500
+  // if scroll too fast to move items in time, there is a blank area
+  // at the top of list when your finger swipe down,
+  // or at the bottom of list when your finger swipe up.
+  // so need some buffer area to prevent the blank area.
+  const topBufferItemsCount = 10
+  const bottomBufferItemsCount = 10
+  const renderedItemsCount =
+    Math.ceil(containerHeight / itemHeight) +
+    topBufferItemsCount +
+    bottomBufferItemsCount
+
+  const container = document.querySelector('#container')
+  // content provider provides height enought content to make container
+  // scrollable
+  const contentProvider = document.querySelector('#content-provider')
+
+  contentProvider.style.height = (dataList.length * itemHeight) + 'px'
+
+  let items = []
+  for (let i = 0; i < renderedItemsCount; i++) {
+    let item = document.createElement('div')
+    item.classList.add('item')
+    updateItem(item, i)
+    contentProvider.appendChild(item)
+    items.push(item)
+  }
+
+  let lastScrollTop = container.scrollTop
+  container.addEventListener('scroll', event => {
+    let i, item, targetIndex
+    const {scrollTop} = container
+    items.sort((item1, item2) => {
+      return parseInt(item1.dataset.index) - parseInt(item2.dataset.index)
+    })
+    if (scrollTop > lastScrollTop) {
+      for (i = 0; i < items.length;) {
+        item = items[i]
+        if (parseInt(item.dataset.y) + itemHeight <= scrollTop - topBufferItemsCount * itemHeight) {
+          targetIndex = parseInt(items[items.length - 1].dataset.index) + 1
+          if (targetIndex < dataList.length) {
+            // move item to bottom
+            updateItem(item, targetIndex)
+            items.splice(i, 1)
+            items.push(item)
+            continue
+          }
+        }
+        i++
+      }
+    }
+    else if (scrollTop < lastScrollTop) {
+      for (i = items.length - 1; i >= 0;) {
+        item = items[i]
+        if (parseInt(item.dataset.y) >= scrollTop + containerHeight + bottomBufferItemsCount * itemHeight) {
+          targetIndex = parseInt(items[0].dataset.index) - 1
+          if (targetIndex >= 0) {
+            // move item to top
+            updateItem(item, targetIndex)
+            items.splice(i, 1)
+            items.unshift(item)
+            continue
+          }
+        }
+        i--
+      }
+    }
+    lastScrollTop = scrollTop
+  }, false)
+
+  function updateItem (item, index) {
+    const y = index * itemHeight
+    item.style.transform = `translateY(${y}px)`
+    item.dataset.y = y
+    item.dataset.index = index
+    item.innerText = dataList[index].getItemInnerHtml()
+    if (index % 2 === 0) {
+      item.classList.add('even')
+    }
+    else {
+      item.classList.remove('even')
+    }
+  }
+  </script>
+</body>
+</html>
